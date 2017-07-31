@@ -14,18 +14,19 @@ struct node {
     int data;
     struct node* next;
 };
+node* start = nullptr;
 
 //function prototypes
 struct node* getNode();
-void createList(int, node*&);
+void createList(int);
 
-void insertAtBeg(node*&);
-void insertAtEnd(node*);
-void insertAtMid(node*);
+void insertAtBeg();
+void insertAtEnd();
+void insertAtMid();
 
-void deleteAtBeg(node*&);
-void deleteAtEnd(node*&);
-void deleteAtMid(node*);
+void deleteAtBeg();
+void deleteAtEnd();
+void deleteAtMid();
 
 int countNode(node*);
 void displayNode(node*&);
@@ -33,24 +34,22 @@ void displayNode(node*&);
 //main function
 int main() {
     
-    
-    node* start = nullptr;
     int choice;
     
     cout << "Enter the number of nodes you'd like in the list: ";
     cin >> choice;
     
-    createList(choice, start);
+    createList(choice);
     
     cout << "Here is the list you created:\n";
     
     displayNode(start);
     
-    deleteAtMid(start);
+    deleteAtMid();
     
     displayNode(start);
     
-    insertAtMid(start);
+    insertAtMid();
     
     displayNode(start);
 
@@ -86,7 +85,7 @@ struct node* getNode()
  - Whatever the situation (empty list or already populated list), start node is returned
  */
 
-void createList(int a, node*& s)
+void createList(int a)
 {
     int i;
     node* newNode;
@@ -94,12 +93,12 @@ void createList(int a, node*& s)
     for(i = 0; i < a; i++)
     {
         newNode = getNode();
-        if (s == nullptr)
+        if (start == nullptr)
         {
-            s = newNode;
+            start = newNode;
         }
         else {
-            temp = s;
+            temp = start;
             while(temp->next != nullptr)
             {
                 temp = temp->next;
@@ -118,18 +117,18 @@ void createList(int a, node*& s)
  to the current start, then start points to newNode
  */
 
-void insertAtBeg(node*& s)
+void insertAtBeg()
 {
     node* newNode;
     newNode = getNode();
-    if(s == nullptr)
+    if(start == nullptr)
     {
-        s = newNode;
+        start = newNode;
     }
     else
     {
-        newNode->next = s;
-        s = newNode;
+        newNode->next = start;
+        start = newNode;
     }
 }
 
@@ -141,18 +140,18 @@ void insertAtBeg(node*& s)
  moves through the list, stopping at the last node
  - The last node's next pointer is set to point to the newly-created node
  */
-void insertAtEnd(node* s)
+void insertAtEnd()
 {
     node* newNode;
     node* temp;
     newNode = getNode();
-    if(s == nullptr)
+    if(start == nullptr)
     {
-        s = newNode;
+        start = newNode;
     }
     else
     {
-        temp = s;
+        temp = start;
         while (temp->next != nullptr)
         {
             temp = temp->next;
@@ -175,7 +174,7 @@ void insertAtEnd(node* s)
  - When the the desired position is reached, prev->next points to the new node, and the new node points to temp
  - Else, the user is told the position is not in the middle of the list
  */
-void insertAtMid(node* s)
+void insertAtMid()
 {
     node* newNode;
     node* temp;
@@ -186,11 +185,11 @@ void insertAtMid(node* s)
     newNode = getNode();
     cout << "Enter the position to add this node at: ";
     cin >> pos;
-    nodectr = countNode(s);
+    nodectr = countNode(start);
     if(pos > 1 && pos < nodectr)
     {
-        temp = s;
-        prev = s;
+        temp = start;
+        prev = start;
         while (ctr < pos)
         {
             prev = temp;
@@ -215,19 +214,19 @@ void insertAtMid(node* s)
  - Temp is deleted and user is notified
  */
 
-void deleteAtBeg(node*& s)
+void deleteAtBeg()
 {
     node* temp;
-    if(s == nullptr)
+    if(start == nullptr)
     {
         cout << "The list is empty.\n";
         return;
     }
     
-    else if(s->next == nullptr)
+    else if(start->next == nullptr)
     {
-        temp = s;
-        s = nullptr;
+        temp = start;
+        start = nullptr;
         delete temp;
         cout << "The node at the beginning of the list has been deleted.\n";
         return;
@@ -235,8 +234,8 @@ void deleteAtBeg(node*& s)
     
     else
     {
-        temp = s;
-        s = temp->next;
+        temp = start;
+        start = temp->next;
         delete temp;
         cout << "The node at the beginning of the list has been deleted.\n";
     }
@@ -250,20 +249,20 @@ void deleteAtBeg(node*& s)
  - Else, temp and prev are initialized to the start pointer's contents, and they both move forward (prev one node behind) in the list
  - Then, the second to last node's next pointer is made null, and temp (which is at the old final node) is deleted
  */
-void deleteAtEnd(node*& s)
+void deleteAtEnd()
 {
     node* temp;
     node* prev;
-    if(s == nullptr)
+    if(start == nullptr)
     {
         cout << "The list is empty.\n";
         return;
     }
     
-    else if(s->next == nullptr)
+    else if(start->next == nullptr)
     {
-        temp = s;
-        s = nullptr;
+        temp = start;
+        start = nullptr;
         delete temp;
         cout << "The node at the beginning of the list has been deleted.\n";
         return;
@@ -271,8 +270,8 @@ void deleteAtEnd(node*& s)
     }
     else
     {
-        temp = s;
-        prev = s;
+        temp = start;
+        prev = start;
         while(temp->next != nullptr)
         {
             prev = temp;
@@ -297,14 +296,14 @@ void deleteAtEnd(node*& s)
  - Else, the user is told the position they entered doesn't exist in the list
  - Once the desired position is reached, prev->next is set to temp->next and temp is deleted...user is notified.
  */
-void deleteAtMid(node* s)
+void deleteAtMid()
 {
     int ctr = 1;
     int pos;
     int nodectr;
     node* temp;
     node* prev;
-    if(s == nullptr)
+    if(start == nullptr)
     {
         cout << "The list is empty.";
         return;
@@ -313,7 +312,7 @@ void deleteAtMid(node* s)
     {
         cout << "Enter the position you want to delete: ";
         cin >> pos;
-        nodectr = countNode(s);
+        nodectr = countNode(start);
         if(pos > nodectr)
         {
             cout << "The postion you entered does not exist in the list. \n";
@@ -321,8 +320,8 @@ void deleteAtMid(node* s)
         }
         else if(pos > 1 && pos < nodectr)
         {
-            temp = s;
-            prev = s;
+            temp = start;
+            prev = start;
             while(ctr < pos)
             {
                 prev = temp;
